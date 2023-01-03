@@ -1,39 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useRef } from 'react'
 import './contact.css'
 import {MdOutlineEmail} from 'react-icons/md'
 import {RiMessengerLine} from 'react-icons/ri'
 import {BsWhatsapp} from 'react-icons/bs'
-import { useState } from 'react';
 import emailjs from 'emailjs-com';
 
-const Result = () => {
-  return(
-    <p>Your message has been sent successfully!</p>
-  );
-};
-
-function Contact(props) {
-  const [result, showResult] = useState(false);
-  const sendEmail = (e) => {
-    e.preventDefault();
-    
-    emailjs.sendForm('service_3d0l6jp', 'template_esmgm78', e.target, 'IYDRxNGn02IUvgF0a')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
+export const Contact = () => {
+const form = useRef();
+const[name, setName] = useState('');
+const[email, setEmail] = useState('');
+const[message, setMessage] = useState('');
+let submit=(e)=>{
+ e.preventDefault();
+ if(!name){
+  alert("Please enter your name")
+ }else if(!email){
+  alert("Please enter your email")
+ }else if(email==='yewantkarki18@gmail.com' || email==='YEWANTKARKI18@GMAIL.COM'){
+  alert("This is my email address. Please enter your valid email address.")
+ }else if(!message){
+  alert("Please enter your message")
+ }else{
+  emailjs.sendForm('service_jekclli', 'template_smqowtc', form.current, 'IYDRxNGn02IUvgF0a')
+      .then(() => {
+          alert("Your mail sent successfully!");
+          setName('');
+          setEmail('');
+          setMessage('');
+      }, () => {
+          alert("Something went wrong! Please try again letter.");
       }
       );
-  e.target.reset();
-  showResult(true);
-};
+ }
+}
 
-// hide result
-setTimeout(() => {
-  showResult(false);
-}, 5000);
-
-  return (
+return (
     <section id='contact'>
       <h5>Get In Touch</h5>
       <h2>Contact Me</h2>
@@ -60,17 +62,15 @@ setTimeout(() => {
           </article>
         </div>
    
-        <form action="" onSubmit={sendEmail}>
-          <input type="text" name='name' placeholder='Your full Name' required/>
-          <input type="email" name='email' placeholder='Your Email' required />
-          <textarea name="message" rows="7" placeholder='Your Message' required></textarea>
+        <form onSubmit={submit} ref={form}>
+          <input type="text" name='name' placeholder='Your full Name' required value={name} onChange={(e)=>{setName(e.target.value)}}/>
+          <input type="email" name='email' placeholder='Your Email' required value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
+          <textarea name="message" rows="7" placeholder='Your Message' required value={message} onChange={(e)=>{setMessage(e.target.value)}}></textarea>
           <button type='submit' className='btn btn-primary'>Send Message</button>
-
-          <div className="row">{result ? <Result /> : null}</div>
         </form>
       </div>
     </section>
-  );
+  )
 }
 
 export default Contact
