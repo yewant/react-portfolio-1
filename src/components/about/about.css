@@ -33,6 +33,10 @@
     transition: var(--transition);
 }
 
+.about__me-image img {
+    height: 500px;
+}
+
 .about__me-image:hover {
     transform: rotate(0deg);
 }
